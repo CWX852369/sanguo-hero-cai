@@ -2,33 +2,56 @@
 
 **1.查询用户表中的所有数据，显示所有列**
 
-进入navicat，对应数据库，新建查询SELECT * FROM `user`
+```
+进入navicat，对应数据库，新建查询SELECT * FROM user
+```
 
 ![img01](assets/img01.png)
 
 **2.查询用户表中所有数据，只显示 uid，user name， nick name,real name.sex 5列**
 
-SELECT uid,user_name,nick_name,real_name,sex FROM `user`
+```
+SELECT uid,user_name,nick_name,real_name,sex FROM user
+```
 
 ![img02](assets/img02.png)
 
 **3.采用汉字别名，查询用户表中所有数据，只显示用户编号、用户名、昵称、真实姓名、性别 5 列（as可以省略）**
 
+***mybatis中，先定义实体类，再通过****resultMap映射过去***
+
+```
 SELECT uid 序号,user_name 编号,nick_name 姓名,real_name 字,sex 性别 FROM user
+```
 
 ![img03](assets/img03.png)
 
 **4.上一个查询中，把性别转换为汉字，使用 case when 的用法**
 
-select uid 序号,user_name 编号,nick_name 姓名,real_name 字,
+```
+mybatis的用法：
+select uid,user_name,nick_name,real_name,
+(case when sex='0' then '女' else '男' end)sex from user;
 
-case sex when 0 then '女' else '男' end 性别 from user;
+
+select uid 序号,user_name 编号,nick_name 姓名,real_name 字,
+(case when sex='0' then '女' else '男'  end)  '性别'  from user;
+```
 
 ![img04](assets/img04.png)
 
+
+
 **5.上一个查询中，通过把姓和字提取出来，组合到一起。(学会使用 left,right,concat ) 函数使用**
 
-SELECT uid 序号,user_name 编号,CONCAT(LEFT(nick_name,1),RIGHT(real_name,2)) 姓名,case sex when 0 then '女' else '男' end 性别 from user;
+```
+mybatis中：
+select uid,user_name,CONCAT(LEFT(nick_name,1),RIGHT(real_name,2))real_name, 
+(case when sex='0' then '女' else '男' end)sex from user;
+
+SELECT uid 序号,user_name 编号,CONCAT(LEFT(nick_name,1),RIGHT(real_name,2)) 姓名,
+case sex when 0 then '女' else '男' end 性别 from user;
+```
 
 ![img05](assets/img05.png)
 
@@ -56,7 +79,14 @@ select * from user where sex=1;
 
 **2.采用汉字别名，查询表中所有数据，只显示用户编号，用户名，昵称，真实姓名，性别5列，并只查男性的前5条记录**
 
+```
+mybatis：
 SELECT uid,user_name,nick_name,real_name,sex FROM user where sex=1 limit 5;
+
+
+
+SELECT uid 序号,user_name 编号,nick_name 姓名,real_name 字,sex 性别 FROM user where sex=1 limit 5;
+```
 
 ![img09](assets/img09.png)
 
@@ -73,3 +103,10 @@ select case sex when 0 then '女' else '男' end 性别,count(sex) 人数 from u
 select LEFT(nick_name,1) 姓氏,count(LEFT(nick_name,1)) 人数 from user where sex=1 GROUP BY LEFT(nick_name,1) HAVING count(LEFT(nick_name,1))>1
 
 ![img11](assets/img11.png)
+
+```
+@Override
+	public String toString() {
+		return "Brand [sum=" + sum + ", 姓氏=" + 姓氏 + "]";
+	}
+```
